@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Order;
+use App\Entity\Bestelling;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OrderType extends AbstractType
+class BestellingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -21,7 +21,7 @@ class OrderType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Order::class,
+            'data_class' => Bestelling::class,
         ]);
     }
 }

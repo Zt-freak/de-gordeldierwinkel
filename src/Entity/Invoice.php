@@ -32,6 +32,10 @@ class Invoice
         return $this->id;
     }
 
+    public function __toString() {
+        return strval($this->getId());
+    }
+
     public function getPaymentDatetime(): ?\DateTimeInterface
     {
         return $this->payment_datetime;

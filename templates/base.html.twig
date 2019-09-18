@@ -9,6 +9,10 @@
                 margin: 0;
             }
 
+            body {
+                background-color: #EBEBEB;
+            }
+
             .notice {
                 background-color: #4F805D;
                 font-size: 21px;
@@ -35,21 +39,79 @@
             .notice a, .errornotice a {
                 color: #ffffff;
             }
+
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                display: flex;
+                justify-content: space-evenly;
+                padding: 15px 0;
+                background-color: #BABABAAA;
+            }
+            nav a {
+                color: #000000;
+                text-decoration: none;
+                letter-spacing: 1.5pt;
+                font-weight: normal;
+            }
+            nav a:hover {
+                text-decoration: underline;
+            }
+
+            .content {
+                padding: 20px;
+                padding-top: 40px;
+                margin-left: auto;
+                margin-right: auto;
+                width: 60vw;
+                min-width: 500px;
+                min-height: 100vh;
+
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: column;
+
+                background-color: #ffffff;
+            }
+
+            th {
+                text-align: left;
+            }
+
+            h1 {
+                letter-spacing: 1.5pt;
+            }
+
+            a {
+                color: #000000;
+                font-weight: bold;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
         </style>
     </head>
     <body>
         <nav>
             <a href="{{ path('index') }}">Home</a>
             <a href="{{ path('product_index') }}">Products</a>
+            <a href="{{ path('category_index') }}">Categories</a>
+            <a href="{{ path('bestelling_index') }}">Orders</a>
+            <a href="{{ path('invoice_index') }}">Invoices</a>
             <a href="{{ path('cart_index') }}">Your Cart</a>
             {% if app.user %}
                 <a href="{{ path('fos_user_security_logout') }}">Log out</a>
             {% else %}
                 <a href="{{ path('fos_user_security_login') }}">Log in</a>
+                <a href="{{ path('fos_user_registration_register') }}">Register</a>
             {% endif %}
-
         </nav>
-        {% block body %}{% endblock %}
+        <div class="content">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

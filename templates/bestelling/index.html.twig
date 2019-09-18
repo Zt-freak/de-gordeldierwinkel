@@ -8,7 +8,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Invoice id</th>
+                <th>Product</th>
                 <th>Quantity</th>
                 <th>actions</th>
             </tr>
@@ -16,7 +17,8 @@
         <tbody>
         {% for bestelling in bestellingen %}
             <tr>
-                <td>{{ bestelling.id }}</td>
+                <td>{{ bestelling.invoice }}</td>
+                <td>{{ bestelling.product }}</td>
                 <td>{{ bestelling.quantity }}</td>
                 <td>
                     <a href="{{ path('bestelling_show', {'id': bestelling.id}) }}">show</a>
