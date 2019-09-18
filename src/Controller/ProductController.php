@@ -10,11 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 /**
  * @Route("/product")
  */
 class ProductController extends AbstractController
 {
+    private $session;
+
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
     /**
      * @Route("/", name="product_index", methods={"GET"})
      */
@@ -90,5 +100,43 @@ class ProductController extends AbstractController
         }
 
         return $this->redirectToRoute('product_index');
+    }
+
+    /**
+     * @Route("/{id}/add", name="product_add", methods={"GET","POST"})
+     */
+    public function add(Request $request, Product $product, ProductRepository $productRepository): Response
+    {
+        if ($this->session->get('cart') == null) {
+            $cart = [];
+            $cart[0][0] = $product->getId();
+            $cart[0][1] = 0;
+        }
+        else {
+            $cart = $this->session->get('cart');
+        }
+
+        $currentKeyNumber = 0;
+        $exists = false;
+        foreach ($cart as &$value) {
+            if ($value[0] == $product->getId()) {
+                $value[1]++;
+                $exists = true;
+            }
+            $currentKeyNumber++;
+        }
+
+        if ($exists == false) {
+            array_push($cart, [$product->getId(), 1]);
+        }
+        unset($value);
+
+        $this->session->set('cart', $cart);
+
+        echo(array_search($product->getId(), $cart));
+        return $this->render('product/index.html.twig', [
+            'products' => $productRepository->findAll(),
+            'addedProduct' => $product,
+        ]);
     }
 }

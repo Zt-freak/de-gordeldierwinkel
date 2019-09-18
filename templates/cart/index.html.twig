@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Cart{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+    {% else %}
+    <div class="errornotice">{% include 'ghost.html.twig' %}<p>Exception! You don't seem to be logged in, you need to <a href="{{ path('fos_user_security_login') }}">log in</a> to add items to your cart.</p></div>
+    {% endif %}
+
+    {% if products %}
+    {% else %}
+    <div class="errornotice">{% include 'ghost.html.twig' %}<p>Exception! Your cart seems to be empty, please go to <a href="{{ path('product_index') }}">products</a> to fill up your cart.</p></div>
+    {% endif %}
+    <style>
+        th {
+            text-align: left;
+        }
+    </style>
+    <h1>Your Cart</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Quantity</th>
+                <th>Name</th>
+                <th>Price per product</th>
+                <th>Total price for this product</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set totalPrice = 0 %}
+        {% for product in products %}
+            {% for id in app.session.get('cart') %}
+                {% if id[0] == product.id %}
+                    <tr>
+                        <td>{{ id[1] }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>&euro; {{ product.price }}</td>
+                        <td>&euro; {{ id[1] * product.price }}</td>
+                        <td class="actionscell">
+                            <a href="{{ path('cart_index', {'remove': product.id}) }}">-</a>
+                            <a href="{{ path('cart_index', {'add': product.id}) }}">+</a>
+                            <a href="{{ path('cart_index', {'delete': product.id}) }}">DELETE</a>
+                        </td>
+                    </tr>
+                    {% set totalPrice = totalPrice + (id[1] * product.price) %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td colspan="2"></td>
+                <th>total</th>
+                <td>&euro; {{ totalPrice }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% if app.user %}
+        {% if products %}
+            <a href="{{ path('cart_checkout') }}">Checkout</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}

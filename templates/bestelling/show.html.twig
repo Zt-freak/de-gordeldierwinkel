@@ -9,18 +9,18 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ order.id }}</td>
+                <td>{{ bestelling.id }}</td>
             </tr>
             <tr>
                 <th>Quantity</th>
-                <td>{{ order.quantity }}</td>
+                <td>{{ bestelling.quantity }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('order_index') }}">back to list</a>
+    <a href="{{ path('bestelling_index') }}">back to list</a>
 
-    <a href="{{ path('order_edit', {'id': order.id}) }}">edit</a>
+    <a href="{{ path('bestelling_edit', {'id': bestelling.id}) }}">edit</a>
 
-    {{ include('order/_delete_form.html.twig') }}
+    {{ include('bestelling/_delete_form.html.twig') }}
 {% endblock %}

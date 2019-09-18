@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Checkout{% endblock %}
+{% block body %}
+    {% if confirm is defined %}
+        {% if confirm == 1 %}
+            <div class="notice">{% include 'ghost.html.twig' %}<p>Checkout successful!</p></div>
+        {% endif %}
+    {% endif %}
+    {% if app.user %}
+        <style>
+            th {
+                text-align: left;
+            }
+        </style>
+        <h1>Checkout</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Quantity</th>
+                    <th>Name</th>
+                    <th>Price per product</th>
+                    <th>Total price for this product</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set totalPrice = 0 %}
+            {% for product in products %}
+                {% for id in app.session.get('cart') %}
+                    {% if id[0] == product.id %}
+                        <tr>
+                            <td>{{ id[1] }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>&euro; {{ product.price }}</td>
+                            <td>&euro; {{ id[1] * product.price }}</td>
+                        </tr>
+                        {% set totalPrice = totalPrice + (id[1] * product.price) %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td colspan="2"></td>
+                    <th>total</th>
+                    <td>&euro; {{ totalPrice }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="{{ path('cart_checkout', {'confirm': 1}) }}">Confirm checkout</a>
+    {% else %}
+        <p>You are not logged in, please <a href="{{ path('fos_user_security_login') }}">log in</a> first before checking out.</p>
+    {% endif %}
+{% endblock %}

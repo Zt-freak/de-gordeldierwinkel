@@ -3,8 +3,16 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+    {% if app.user %}
+    {% else %}
+    <div class="errornotice">{% include 'ghost.html.twig' %}<p>Exception! You don't seem to be logged in, you need to <a href="{{ path('fos_user_security_login') }}">log in</a> to add items to your cart.</p></div>
+    {% endif %}
 
+    {% if addedProduct is defined %}
+    <div class="notice">{% include 'ghost.html.twig' %}<p>You just added a {{ addedProduct.name }} to your <a href="{{ path('cart_index') }}">cart</a>.</p></div>
+    {% endif %}
+
+    <h1>Product index</h1>
     <table class="table">
         <thead>
             <tr>
@@ -20,11 +28,16 @@
             <tr>
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
-                <td>{{ product.price }}</td>
+                <td>&euro; {{ product.price }}</td>
                 <td>{{ product.description }}</td>
                 <td>
-                    <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+                    <a href="{{ path('product_show', {'id': product.id}) }}">show</a><br />
+                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a><br />
+                    {% if app.user %}
+                    <a href="{{ path('product_add', {'id': product.id}) }}">add</a><br />
+                    {% else %}
+                    <span style="opacity:.5;cursor: not-allowed;">add</span>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
