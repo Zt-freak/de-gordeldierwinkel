@@ -4,7 +4,6 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,10 +27,9 @@ class CartController extends AbstractController
         $this->session = $session;
     }
 
-    private function confirmCheckout(ProductRepository $productRepository): Response
+    private function confirmCheckout(ProductRepository $productRepository)
     {
-        $userRepository = new UserRepository;
-        $invoice = $this->createInvoice($userRepository);
+        $invoice = $this->createInvoice();
 
         if ($this->session->get('cart') == null) {
             $cart = [];
@@ -57,15 +55,14 @@ class CartController extends AbstractController
         }
     }
 
-    private function createInvoice(UserRepository $userRepository): Response
-    {
+    private function createInvoice() {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
         $entityManager = $this->getDoctrine()->getManager();
 
         $invoice = new Invoice();
         $invoice->setPaymentDatetime(new \DateTime());
-        $invoice->setUser($userRepository->findById($user));
+        $invoice->setUser($user);
 
         $entityManager->persist($invoice);
 
