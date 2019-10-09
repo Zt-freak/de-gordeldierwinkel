@@ -20,6 +20,7 @@
                 <th>Name</th>
                 <th>Price</th>
                 <th>Description</th>
+                <th>Image</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -30,6 +31,7 @@
                 <td>{{ product.name }}</td>
                 <td>&euro; {{ product.price }}</td>
                 <td>{{ product.description }}</td>
+                <td><img src={{ vich_uploader_asset(product, 'imageFile') }} width="300px"></td>
                 <td>
                     <a href="{{ path('product_show', {'id': product.id}) }}">show</a><br />
                     <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a><br />
